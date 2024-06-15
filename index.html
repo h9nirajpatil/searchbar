@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Search Bar with Suggestions</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+    .search-container {
+        position: relative;
+        width: 300px;
+        margin: 50px auto;
+    }
+    .search-input {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+    }
+    .suggestions {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        z-index: 1000;
+        width: 100%;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-top: none;
+        display: none;
+    }
+    .suggestion-item {
+        padding: 10px;
+        cursor: pointer;
+    }
+    .suggestion-item:hover {
+        background-color: #f0f0f0;
+    }
+</style>
+</head>
+<body>
+
+<div class="search-container">
+    <input type="text" class="search-input" id="searchInput" placeholder="Search...">
+    <div class="suggestions" id="suggestionBox"></div>
+</div>
+
+<script>
+    const searchInput = document.getElementById('searchInput');
+    const suggestionBox = document.getElementById('suggestionBox');
+    
+    const suggestions = ['Apple', 'Banana', 'Cherry', 'Durian', 'Elderberry', 'Fig', 'Grape', 'Honeydew', 'Kiwi', 'Lemon'];
+    
+    // Function to filter suggestions based on input
+    function filterSuggestions(input) {
+        return suggestions.filter(suggestion => suggestion.toLowerCase().includes(input.toLowerCase()));
+    }
+    
+    // Function to display suggestions
+    function displaySuggestions(input) {
+        const filteredSuggestions = filterSuggestions(input);
+        suggestionBox.innerHTML = '';
+        filteredSuggestions.forEach(suggestion => {
+            const suggestionItem = document.createElement('div');
+            suggestionItem.classList.add('suggestion-item');
+            suggestionItem.textContent = suggestion;
+            suggestionItem.addEventListener('click', () => {
+                searchInput.value = suggestion;
+                suggestionBox.innerHTML = '';
+            });
+            suggestionBox.appendChild(suggestionItem);
+        });
+        if (filteredSuggestions.length > 0) {
+            suggestionBox.style.display = 'block';
+        } else {
+            suggestionBox.style.display = 'none';
+        }
+    }
+    
+    // Event listener for input changes
+    searchInput.addEventListener('input', () => {
+        const input = searchInput.value.trim();
+        displaySuggestions(input);
+    });
+</script>
+
+</body>
+</html>
